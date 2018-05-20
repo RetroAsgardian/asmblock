@@ -13,5 +13,5 @@ $(document).ready(function() {
 		$.each(instances, function(index, instance) {
 			instance.close();
 		});
-	}, 3000);
+	}, 2000);
 });
