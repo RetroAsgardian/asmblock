@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,500,600,700,900');
+/*
+Palette:
+0  Black           #393457
+1  White           #ffffff
+2  Mint Green      #6df7c1
+3  Blue            #11adc1
+4  Gray            #606c81
+5  Blue Green      #1e8875
+6  Green           #5bb361
+7  Lime Green      #a1e55a
+8  Yellow          #f7e476
+9  Orange          #f99252
+10 Red             #cb4d68
+11 Plum            #6a3771
+12 Raspberry       #c92464
+13 Pink            #f48cb6
+14 Peach           #f7b69e
+15 Olive           #9b9c82
+*/
+.color0 {
+	color: white;
+	background-color: #393457;
+}
+.color1 {
+	background-color: #ffffff;
+}
+.color2 {
+	background-color: #6df7c1;
+}
+.color3 {
+	background-color: #11adc1;
+}
+.color4 {
+	color: white;
+	background-color: #606c81;
+}
+.color5 {
+	color: white;
+	background-color: #1e8875;
+}
+.color6 {
+	background-color: #5bb361;
+}
+.color7 {
+	background-color: #a1e55a;
+}
+.color8 {
+	background-color: #f7e476;
+}
+.color9 {
+	background-color: #f99252;
+}
+.color10 {
+	background-color: #cb4d68;
+}
+.color11 {
+	color: white;
+	background-color: #6a3771;
+}
+.color12 {
+	background-color: #c92464;
+}
+.color13 {
+	background-color: #f48cb6;
+}
+.color14 {
+	background-color: #f7b69e;
+}
+.color15 {
+	background-color: #9b9c82;
+}
+ul.list li {
+	list-style-type: disc !important;
+	list-style-position: inside !important;
+}
+span.card-panel {
+	display: inline-block;
+	padding: 10px;
+	margin: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+div.card-panel {
+	padding: 6px;
+	margin: 5px;
+	height: 55px;
+}
+canvas {
+	width: 320px;
+	height: 240px;
+	background-color: #393457;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: pixelated;
+	margin: auto;
+	display: block;
+	border-radius: 2px;
+}
+.spacer {
+	height: 70px;
+}
+body {
+	max-width: 1300px;
+	margin: auto;
+	margin-top: 20px;
+	overflow-y: scroll !important;
+}
+.material-tooltip {
+	z-index: 1200 !important;
+}
+.modal {
+	z-index: 1800 !important;
+}
+.modal-content {
+	overflow-y: scroll !important;
+}
+.center-text {
+	text-align: center;
+	display: block;
+	width: 100%;
+}
+.uppercase {
+	text-transform: uppercase;
+}
+.light-spacing {
+	letter-spacing: 0.3em;
+}

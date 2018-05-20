@@ -1,0 +1,344 @@
+<html>
+	<head>
+		<title>ASMBlock by RetroAsgardian</title>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="css/materialize.css" type="text/css" rel="stylesheet" />
+		<link href="asmblock.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		<script src="asmblock.js"></script>
+		<script src="js/materialize.js"></script>
+		<ul class="collapsible">
+			<li class="active">
+				<div class="collapsible-header"><b class="center-text uppercase light-spacing">Player</b></div>
+				<div class="collapsible-body" id="player">
+					<div class="row">
+						<div class="col s4">
+							<canvas height="120" width="160" id="canvas">yOuR bRoWsEr SuX lOl - guy whomst uses Netscape Navigator 9</canvas>
+						</div>
+						<div class="col s8">
+							<a id="game-start" class="btn tooltipped purple waves-effect" data-tooltip="play"><i class="material-icons">play_arrow</i></a>
+							<a id="game-stop" class="btn tooltipped deep-purple waves-effect" data-tooltip="stop"><i class="material-icons">stop</i></a><br /><br />
+							<a id="game-debug" class="btn tooltipped amber waves-effect" data-tooltip="debug"><i class="material-icons">bug_report</i></a>
+							<a id="game-debug-next" class="btn tooltipped orange waves-effect" data-tooltip="run block"><i class="material-icons">navigate_next</i></a>
+							<a id="game-debug-skip" class="btn tooltipped deep-orange waves-effect" data-tooltip="run blocks until jump"><i class="material-icons">redo</i></a><br /><br />
+							<a id="open-help" class="btn tooltipped blue modal-trigger waves-effect" href="#help-modal" data-tooltip="help"><i class="material-icons">help</i></a>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<div class="tap-target blue" data-target="open-help" style="width: 450px; height: 450px;">
+			<div class="tap-target-content white-text">
+				<h5>Help</h5>
+				<p>Click here if you're stuck</p>
+			</div>
+		</div>
+		<div id="help-modal" class='modal modal-fixed-footer'>
+			<div class="modal-content">
+				<h4>ASMBlock Help</h4>
+				<ul class="collapsible expandable">
+					<li>
+						<div class="collapsible-header"><b class="center-text uppercase light-spacing">Basic Concepts</b></div>
+						<div class="collapsible-body">
+							<h5>Registers</h5>
+							<p>
+								Registers are small pieces of memory that you can perform
+								operations on. For example, you can set a register's value,
+								add something to it, and then store that value in RAM. You have
+								8 registers to work with, labeled R0 to R7. Each register can
+								store a value from -32768 to 32767.
+							</p>
+							<h5>Blocks and Program Memory</h5>
+							<p>
+								Blocks are used to tell ASMBlock what actions to perform. For
+								the most part, these blocks are run from top to bottom, and when
+								there are no more blocks, the program will stop. Most blocks
+								contain one or more inputs, which are color coded like so:
+								<ul class="list">
+									<li>White: Register or number</li>
+									<li>Green: Register only</li>
+									<li>Blue: Label</li>
+								</ul>
+								Blocks are stored in Program Memory, which can only be modified
+								in the editor, not in the code itself. Program Memory can store
+								up to 32768 blocks, which should be adequate for most programs.
+							</p>
+							<h5>Random Access Memory</h5>
+							<p>
+								In addition to Progam Memory, you also have access to 32768
+								locations of Random Access Memory. Although you can't change
+								their values in the editor, your program can read and write to
+								each location as needed. Just like the registers, the values in
+								Random Access Memory can range from -32768 to 32767.
+							</p>
+							<h5>Binary</h5>
+							<p>
+								In the "Math" section, after the four usual operations
+								(addition, subtraction, multiplication, and division), there
+								are 5 extra blocks: 'shift register', 'or register', 'xor
+								register', 'and register', and 'not register'. These blocks
+								operate on the binary representation of the value in the
+								register. In ASMBlock's registers are 16-bit signed integers.
+								'16-bit' means that their binary representation is 16 'bits', or
+								'binary digits', long. 'Signed' means that the values can be
+								positive or negative. 'Integer' means that the values have to be
+								whole numbers. The binary representation of 301, for example,
+								is 0000000100101101:
+								<table class="centered">
+									<thead>
+										<tr>
+											<th>-32768</th>
+											<th>16384</th>
+											<th>8192</th>
+											<th>4096</th>
+											<th>2048</th>
+											<th>1024</th>
+											<th>512</th>
+											<th>256</th>
+											<th>128</th>
+											<th>64</th>
+											<th>32</th>
+											<th>16</th>
+											<th>8</th>
+											<th>4</th>
+											<th>2</th>
+											<th>1</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>1</td>
+											<td>0</td>
+											<td>0</td>
+											<td>1</td>
+											<td>0</td>
+											<td>1</td>
+											<td>1</td>
+											<td>0</td>
+											<td>1</td>
+										</tr>
+									</tbody>
+								</table>
+								Adding each number in the top row that has a '1' under it will
+								result in 301, the number we started with.
+								<br /><br />
+								The binary representation of -1 is 1111111111111111:
+								<table class="centered">
+									<thead>
+										<tr>
+											<th>-32768</th>
+											<th>16384</th>
+											<th>8192</th>
+											<th>4096</th>
+											<th>2048</th>
+											<th>1024</th>
+											<th>512</th>
+											<th>256</th>
+											<th>128</th>
+											<th>64</th>
+											<th>32</th>
+											<th>16</th>
+											<th>8</th>
+											<th>4</th>
+											<th>2</th>
+											<th>1</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+											<td>1</td>
+										</tr>
+									</tbody>
+								</table>
+								Again, adding each number with a '1' under it will result in the
+								number we started with.
+								<br /><br />
+								Let's say you were only interested in the rightmost 4 bits of
+								R0. Add the rightmost 4 numbers in the top row together. The
+								result is 15. You can then put that value into an 'and register'
+								block like so:
+								<div class="card-panel amber">
+									and register:
+									<span class="card-panel teal accent-1 waves-effect">R0</span>
+									with:
+									<span class="card-panel waves-effect">15</span>
+								</div>
+								This block looks at each bit in both inputs. If the first
+								input's bit is a 1, AND the second input's bit is a 1, it will
+								set the register's bit to a 1. Otherwise, it will set the
+								register's bit to a 0. So, it will replace the leftmost 12 bits
+								of the register with 0's, but leave the rest untouched.
+								<br /><br />
+								The 'or register' block also looks at each bit in both of its
+								inputs. But, instead, it will set the register's bit to a 1 if
+								the first input's bit OR the second input's bit is a 1, or both.
+								'xor register' does the same thing, except if both bits are 1,
+								it sets the register's bit to a 0.
+								<br /><br />
+								'not register' just inverts the bits of the register, setting
+								each '1' bit to a '0', and vice versa.
+								<br /><br />
+								'shift register' does something completely different. Instead of
+								comparing bits, it slides the bits over. Any bits that slide
+								past the leftmost or rightmost bit are just discarded, and any
+								bits that are blank are set to 0. A positive value in the second
+								input will slide the register that many bits to the right, and a
+								negative value will slide the register that many bits to the
+								left.
+							</p>
+							<h5>Labels</h5>
+							<p>
+								Labels are a special kind of block. Normally, they do nothing.
+								However, you can type a bit of text into them. When you put that
+								same text into the input of a 'jump to' or 'run subroutine'
+								block, ASMBlock will 'jump' to the label, continuing to run the
+								code from there.
+							</p>
+							<h5>Jumps vs. Subroutines</h5>
+							<p>
+								You may have noticed that 'jump to' blocks and 'run subroutine'
+								blocks have the exact same inputs and exact same conditions.
+								They also work similarly, moving to a label and running code
+								from that point. However, there is one minor difference. A
+								normal jump does not have any way to return back to the code
+								that triggered it. A subroutine does. If you have a task that
+								you need to do at multiple points in your code, instead of
+								writing the same code (or similar code) multiple times, you can
+								put the code in a subroutine and run that subroutine whenever
+								you need to. For example, you could write a subroutine that
+								checks if a particular button is pressed.
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect btn-flat">Close</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s4">
+				<div class="card">
+					<div class="card-content">
+						<b class="center-text uppercase light-spacing">General</b>
+						<div class="card-panel hoverable waves-effect waves-block blue-grey blue-grey-text lighten-4 text-lighten-4" id="null"></div>
+						<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-value">
+							set register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							to:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-ram">
+							set register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							to ram:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block cyan" id="store-register-in-ram">
+							store:
+							<span class="card-panel waves-effect">0</span>
+							in ram:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block cyan" id="compare-registers">
+							compare register a:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							with b:
+							<span class="card-panel teal accent-1 waves-effect">R1</span>
+						</div>
+						<b class="center-text uppercase light-spacing">Math</b>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="add-to-register">
+							add:
+							<span class="card-panel waves-effect">0</span>
+							to register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="subtract-from-register">
+							subtract:
+							<span class="card-panel waves-effect">0</span>
+							from register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="multiply-register-by">
+							multiply register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							by:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="divide-register-by">
+							divide register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							by:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="shift-register-by">
+							shift register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							by:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="or-register-with">
+							or register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							with:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="xor-register-with">
+							xor register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							with:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="and-register-with">
+							and register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							with:
+							<span class="card-panel waves-effect">0</span>
+						</div>
+						<div class="card-panel hoverable waves-effect waves-block amber" id="not-register">
+							not register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+						</div>
+						<b class="center-text uppercase light-spacing">Game</b>
+						<div class="card-panel hoverable waves-effect waves-block lime" id="set-register-to-control-state">
+							set register:
+							<span class="card-panel teal accent-1 waves-effect">R0</span>
+							to controller state
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col s8">
+				<div class="card">
+					<div class="card-content">
+						<b class="center-text uppercase light-spacing">Code</b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
