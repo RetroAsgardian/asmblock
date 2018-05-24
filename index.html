@@ -9,30 +9,38 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 		<script src="asmblock.js"></script>
 		<script src="js/materialize.js"></script>
-		<ul class="collapsible">
-			<li class="active">
-				<div class="collapsible-header"><b class="center-text uppercase light-spacing">Player</b></div>
-				<div class="collapsible-body" id="player">
-					<div class="row">
-						<div class="col s4">
-							<canvas height="120" width="160" id="canvas">yOuR bRoWsEr SuX lOl - guy whomst uses Netscape Navigator 9</canvas>
-						</div>
-						<div class="col s8">
-							<a id="game-start" class="btn tooltipped purple waves-effect" data-tooltip="play"><i class="material-icons">play_arrow</i></a>
-							<a id="game-stop" class="btn tooltipped deep-purple waves-effect" data-tooltip="stop"><i class="material-icons">stop</i></a><br /><br />
-							<a id="game-debug" class="btn tooltipped amber waves-effect" data-tooltip="debug"><i class="material-icons">bug_report</i></a>
-							<a id="game-debug-next" class="btn tooltipped orange waves-effect" data-tooltip="run block"><i class="material-icons">navigate_next</i></a>
-							<a id="game-debug-skip" class="btn tooltipped deep-orange waves-effect" data-tooltip="run blocks until jump"><i class="material-icons">redo</i></a><br /><br />
-							<a id="open-help" class="btn tooltipped blue modal-trigger waves-effect" href="#help-modal" data-tooltip="help"><i class="material-icons">help</i></a>
-						</div>
-					</div>
-				</div>
-			</li>
-		</ul>
-		<div class="tap-target blue" data-target="open-help" style="width: 450px; height: 450px;">
-			<div class="tap-target-content white-text">
-				<h5>Help</h5>
-				<p>Click here if you're stuck</p>
+		<div class="modal" id="label-modal">
+			<div class="modal-content">
+				<input type="text" class="browser-default z-depth-1 light-blue lighten-4" placeholder="Label" />
+				<a class="btn modal-close">OK</a>
+			</div>
+		</div>
+		<div class="modal" id="value-modal">
+			<div class="modal-content">
+				<p>Value</p>
+				<input type="text" class="browser-default z-depth-1" placeholder="Value" />
+				<a class="btn modal-close teal lighten-3">OK</a>
+				<p>Register</p>
+				<a class="btn modal-close">R0</a>
+				<a class="btn modal-close teal lighten-3">R1</a>
+				<a class="btn modal-close teal lighten-3">R2</a>
+				<a class="btn modal-close teal lighten-3">R3</a>
+				<a class="btn modal-close teal lighten-3">R4</a>
+				<a class="btn modal-close teal lighten-3">R5</a>
+				<a class="btn modal-close teal lighten-3">R6</a>
+				<a class="btn modal-close teal lighten-3">R7</a>
+			</div>
+		</div>
+		<div class="modal" id="register-modal">
+			<div class="modal-content">
+				<a class="btn modal-close">R0</a>
+				<a class="btn modal-close teal lighten-3">R1</a>
+				<a class="btn modal-close teal lighten-3">R2</a>
+				<a class="btn modal-close teal lighten-3">R3</a>
+				<a class="btn modal-close teal lighten-3">R4</a>
+				<a class="btn modal-close teal lighten-3">R5</a>
+				<a class="btn modal-close teal lighten-3">R6</a>
+				<a class="btn modal-close teal lighten-3">R7</a>
 			</div>
 		</div>
 		<div id="help-modal" class='modal modal-fixed-footer'>
@@ -63,7 +71,8 @@
 								</ul>
 								Blocks are stored in Program Memory, which can only be modified
 								in the editor, not in the code itself. Program Memory can store
-								up to 32768 blocks, which should be adequate for most programs.
+								up to 98304 blocks, which is much more than you would reasonably
+								need, unless you're trying to port Windows 10 to ASMBlock.
 							</p>
 							<h5>Random Access Memory</h5>
 							<p>
@@ -177,60 +186,194 @@
 								Again, adding each number with a '1' under it will result in the
 								number we started with.
 								<br /><br />
-								Let's say you were only interested in the rightmost 4 bits of
-								R0. Add the rightmost 4 numbers in the top row together. The
-								result is 15. You can then put that value into an 'and register'
-								block like so:
-								<div class="card-panel amber">
-									and register:
-									<span class="card-panel teal accent-1 waves-effect">R0</span>
-									with:
-									<span class="card-panel waves-effect">15</span>
-								</div>
-								This block looks at each bit in both inputs. If the first
-								input's bit is a 1, AND the second input's bit is a 1, it will
-								set the register's bit to a 1. Otherwise, it will set the
-								register's bit to a 0. So, it will replace the leftmost 12 bits
-								of the register with 0's, but leave the rest untouched.
+								The <span class='card-panel amber'>and register</span> block
+								looks at each bit in both inputs. If the first input's bit is a
+								1, and the second input's bit is a 1, it will set the register's
+								bit to a 1. Otherwise, it will set the register's bit to a 0.
 								<br /><br />
-								The 'or register' block also looks at each bit in both of its
-								inputs. But, instead, it will set the register's bit to a 1 if
-								the first input's bit OR the second input's bit is a 1, or both.
-								'xor register' does the same thing, except if both bits are 1,
-								it sets the register's bit to a 0.
+								<span class='card-panel amber'>or register</span> also looks at
+								each bit in both of its inputs. But, instead, it will set the
+								register's bit to a 1 if the first input's bit or the second
+								input's bit is a 1, or both.
 								<br /><br />
-								'not register' just inverts the bits of the register, setting
-								each '1' bit to a '0', and vice versa.
+								<span class='card-panel amber'>xor register</span> does the same
+								thing as <span class='card-panel amber'>or register</span>,
+								except if both bits are 1, it sets the register's bit to a 0.
 								<br /><br />
-								'shift register' does something completely different. Instead of
-								comparing bits, it slides the bits over. Any bits that slide
-								past the leftmost or rightmost bit are just discarded, and any
-								bits that are blank are set to 0. A positive value in the second
-								input will slide the register that many bits to the right, and a
-								negative value will slide the register that many bits to the
-								left.
+								<span class='card-panel amber'>not register</span> just inverts
+								the bits of the register, setting each '1' bit to a '0', and
+								vice versa.
+								<br /><br />
+								<span class='card-panel amber'>shift register</span> does
+								something completely different. Instead of comparing bits, it
+								slides the bits over. Any bits that slide past the leftmost or
+								rightmost bit are just discarded, and any bits that are blank
+								are set to 0. A positive value in the second input will slide
+								the register that many bits to the right, and a negative value
+								will slide the register that many bits to the left.
 							</p>
 							<h5>Labels</h5>
 							<p>
 								Labels are a special kind of block. Normally, they do nothing.
 								However, you can type a bit of text into them. When you put that
-								same text into the input of a 'jump to' or 'run subroutine'
-								block, ASMBlock will 'jump' to the label, continuing to run the
-								code from there.
+								same text into the input of a
+								<span class='card-panel deep-orange'>jump to</span> or
+								<span class='card-panel deep-orange'>run subroutine</span> block,
+								ASMBlock will 'jump' to the label, continuing to run the code
+								from there.
 							</p>
 							<h5>Jumps vs. Subroutines</h5>
 							<p>
-								You may have noticed that 'jump to' blocks and 'run subroutine'
-								blocks have the exact same inputs and exact same conditions.
-								They also work similarly, moving to a label and running code
-								from that point. However, there is one minor difference. A
-								normal jump does not have any way to return back to the code
-								that triggered it. A subroutine does. If you have a task that
-								you need to do at multiple points in your code, instead of
-								writing the same code (or similar code) multiple times, you can
-								put the code in a subroutine and run that subroutine whenever
-								you need to. For example, you could write a subroutine that
-								checks if a particular button is pressed.
+								You may have noticed that
+								<span class='card-panel deep-orange'>jump to</span> blocks and
+								<span class='card-panel deep-orange'>run subroutine</span> blocks have
+								the exact same inputs and exact same conditions. They also work
+								similarly, moving to a label and running code from that point.
+								However, there is one minor difference. A normal jump does not
+								have any way to return back to the code that triggered it. A
+								subroutine does. If you have a task that you need to do at
+								multiple points in your code, instead of writing the same code
+								(or similar code) multiple times, you can put the code in a
+								subroutine and run that subroutine whenever you need to.
+							</p>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header"><b class="center-text uppercase light-spacing">Graphics</b></div>
+						<div class="collapsible-body">
+							<h5>The Screen</h5>
+							<p>
+								ASMBlock has a 160x120 16-color screen. These are the 16
+								available colors:
+								<div class="row">
+									<div class="col s3"><div class="card color0 "><div class="card-content">0: Black</div></div></div>
+									<div class="col s3"><div class="card color1 "><div class="card-content">1: White</div></div></div>
+									<div class="col s3"><div class="card color2 "><div class="card-content">2: Mint Green</div></div></div>
+									<div class="col s3"><div class="card color3 "><div class="card-content">3: Blue</div></div></div>
+									<div class="col s3"><div class="card color4 "><div class="card-content">4: Gray</div></div></div>
+									<div class="col s3"><div class="card color5 "><div class="card-content">5: Blue Green</div></div></div>
+									<div class="col s3"><div class="card color6 "><div class="card-content">6: Green</div></div></div>
+									<div class="col s3"><div class="card color7 "><div class="card-content">7: Lime Green</div></div></div>
+									<div class="col s3"><div class="card color8 "><div class="card-content">8: Yellow</div></div></div>
+									<div class="col s3"><div class="card color9 "><div class="card-content">9: Orange</div></div></div>
+									<div class="col s3"><div class="card color10"><div class="card-content">10: Red</div></div></div>
+									<div class="col s3"><div class="card color11"><div class="card-content">11: Plum</div></div></div>
+									<div class="col s3"><div class="card color12"><div class="card-content">12: Raspberry</div></div></div>
+									<div class="col s3"><div class="card color13"><div class="card-content">13: Pink</div></div></div>
+									<div class="col s3"><div class="card color14"><div class="card-content">14: Tan</div></div></div>
+									<div class="col s3"><div class="card color15"><div class="card-content">15: Olive</div></div></div>
+								</div>
+								All of these colors can be used at any time, anywhere on the
+								screen.
+							</p>
+							<h5>Graphics Frames</h5>
+							<p>
+								To limit the speed at which your program runs at, as well as to
+								reduce the load on your computer, you can use the
+								<span class="card-panel lime">wait for next graphics frame</span>
+								block. This block will pause your code for about 1/30 of a
+								second, which results in a frame rate of approximately 30 FPS.
+								This should be adequate for most ASMBlock programs.
+							</p>
+							<h5>The Graphics Cursor</h5>
+							<p>
+								To reduce the amount of inputs in graphics-related blocks,
+								ASMBlock uses a 'graphics cursor', which tells those blocks
+								where to start drawing from. The graphics cursor can be moved
+								with the <span class="card-panel lime">move to</span>,
+								<span class="card-panel lime">line to</span>,
+								<span class="card-panel lime">rect to</span>, and
+								<span class="card-panel lime">fill rect to</span> blocks.
+							</p>
+							<h5>Stamps</h5>
+							<p>
+								For drawing common graphics patterns quickly (such as letters,
+								numbers, and faces), ASMBlock uses a 'stamp' system. Each stamp
+								is an 8x8 pattern of transparent and solid pixels, and you can
+								position it anywhere and draw it with any of the 16 available
+								colors.
+							</p>
+							<h5>Sprites</h5>
+							<p>
+								In addition to 68 1-color stamps, you also have access to 32
+								15-color sprites. Sprites are 16x16, and take their patterns
+								from RAM. In a sprite, color #15 (Olive) is used as the
+								transparency color, and any pixels with this color will not be
+								drawn. Sprite data is stored sequentially in RAM, with each
+								location representing 4 pixels of the sprite. A sprite takes up
+								64 locations of RAM, and works independently of the graphics
+								cursor. Their position, visibility, and the location in RAM that
+								their pattern starts at can be changed on the fly.
+							</p>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header"><b class="center-text uppercase light-spacing">Other</b></div>
+						<div class="collapsible-body">
+							<h5>Using the Program Memory Editor</h5>
+							<p>
+								To add and change blocks in Program Memory, you first have to
+								select the new block by finding and clicking it in the left-hand
+								side of the window. Then, you can either click on a block in the
+								right-hand side of the window to replace that block, or click
+								the blue 'insert after' button to the right of a block to put
+								the new block right below. Inputs can be changed just by
+								clicking on them and selecting a value in the dialog box.
+							</p>
+							<h5>Input</h5>
+							<p>
+								ASMBlock has a 7-button controller mapped to the arrow keys, Z,
+								X, and C. Using the
+								<span class="card-panel lime">set register to controller state</span>
+								block, you can find out which buttons are being pressed and
+								react accordingly. The buttons are stored in the register like
+								this:
+								<table class="centered">
+									<thead>
+										<tr>
+											<th>-32768</th>
+											<th>16384</th>
+											<th>8192</th>
+											<th>4096</th>
+											<th>2048</th>
+											<th>1024</th>
+											<th>512</th>
+											<th>256</th>
+											<th>128</th>
+											<th>64</th>
+											<th>32</th>
+											<th>16</th>
+											<th>8</th>
+											<th>4</th>
+											<th>2</th>
+											<th>1</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>0</td>
+											<td>Up</td>
+											<td>Down</td>
+											<td>Left</td>
+											<td>Right</td>
+											<td>Z</td>
+											<td>X</td>
+											<td>C</td>
+										</tr>
+									</tbody>
+								</table>
+								You can use an
+								<span class='card-panel amber'>and register</span> block to
+								look at only a specific button, so that your code can handle
+								multiple buttons being pressed at once.
 							</p>
 						</div>
 					</li>
@@ -240,102 +383,273 @@
 				<a href="#!" class="modal-close waves-effect btn-flat">Close</a>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col s4">
-				<div class="card">
-					<div class="card-content">
-						<b class="center-text uppercase light-spacing">General</b>
-						<div class="card-panel hoverable waves-effect waves-block blue-grey blue-grey-text lighten-4 text-lighten-4" id="null"></div>
-						<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-value">
-							set register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							to:
-							<span class="card-panel waves-effect">0</span>
+		<ul class="collapsible">
+			<li class="active">
+				<div class="collapsible-header"><b class="center-text uppercase light-spacing">Player</b></div>
+				<div class="collapsible-body" id="player">
+					<div class="row">
+						<div class="col s4">
+							<canvas height="120" width="160" id="canvas">yOuR bRoWsEr SuX lOl - guy whomst uses Netscape Navigator 9</canvas>
 						</div>
-						<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-ram">
-							set register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							to ram:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block cyan" id="store-register-in-ram">
-							store:
-							<span class="card-panel waves-effect">0</span>
-							in ram:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block cyan" id="compare-registers">
-							compare register a:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							with b:
-							<span class="card-panel teal accent-1 waves-effect">R1</span>
-						</div>
-						<b class="center-text uppercase light-spacing">Math</b>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="add-to-register">
-							add:
-							<span class="card-panel waves-effect">0</span>
-							to register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="subtract-from-register">
-							subtract:
-							<span class="card-panel waves-effect">0</span>
-							from register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="multiply-register-by">
-							multiply register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							by:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="divide-register-by">
-							divide register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							by:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="shift-register-by">
-							shift register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							by:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="or-register-with">
-							or register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							with:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="xor-register-with">
-							xor register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							with:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="and-register-with">
-							and register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							with:
-							<span class="card-panel waves-effect">0</span>
-						</div>
-						<div class="card-panel hoverable waves-effect waves-block amber" id="not-register">
-							not register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-						</div>
-						<b class="center-text uppercase light-spacing">Game</b>
-						<div class="card-panel hoverable waves-effect waves-block lime" id="set-register-to-control-state">
-							set register:
-							<span class="card-panel teal accent-1 waves-effect">R0</span>
-							to controller state
+						<div class="col s8">
+							<a id="game-start" class="btn tooltipped purple waves-effect" data-tooltip="play"><i class="material-icons">play_arrow</i></a>
+							<a id="game-stop" class="btn tooltipped deep-purple waves-effect" data-tooltip="stop"><i class="material-icons">stop</i></a><br /><br />
+							<a id="game-debug" class="btn tooltipped amber waves-effect" data-tooltip="debug"><i class="material-icons">bug_report</i></a>
+							<a id="game-debug-next" class="btn tooltipped orange waves-effect" data-tooltip="run block"><i class="material-icons">navigate_next</i></a>
+							<a id="game-debug-skip" class="btn tooltipped deep-orange waves-effect" data-tooltip="run blocks until jump"><i class="material-icons">redo</i></a><br /><br />
+							<a id="open-help" class="btn tooltipped blue modal-trigger waves-effect" href="#help-modal" data-tooltip="help"><i class="material-icons">help</i></a>
 						</div>
 					</div>
 				</div>
+			</li>
+		</ul>
+		<div class="row">
+			<div id="sticky-trigger"></div>
+			<div class="col s4">
+				<ul class="collapsible accordion-alt">
+					<li>
+						<div class="collapsible-header cyan"><b class="center-text uppercase light-spacing">General</b></div>
+						<div class="collapsible-body">
+							<div class="card-panel hoverable waves-effect waves-block light-blue lighten-4" id="label">
+								label:
+								<input type="text" class="browser-default z-depth-1" />
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-value">
+								set register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								to:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block cyan" id="set-register-to-ram">
+								set register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								to ram:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block cyan" id="store-register-in-ram">
+								store:
+								<span class="card-panel waves-effect">0</span>
+								in ram:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block cyan" id="compare-registers">
+								compare register a:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								with b:
+								<span class="card-panel teal accent-1 waves-effect">R1</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header amber"><b class="center-text uppercase light-spacing">Math</b></div>
+						<div class="collapsible-body">
+							<div class="card-panel hoverable waves-effect waves-block amber" id="add-to-register">
+								add:
+								<span class="card-panel waves-effect">0</span>
+								to register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="subtract-from-register">
+								subtract:
+								<span class="card-panel waves-effect">0</span>
+								from register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="multiply-register-by">
+								multiply register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								by:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="divide-register-by">
+								divide register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								by:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="shift-register-by">
+								shift register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								by:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="or-register-with">
+								or register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								with:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="xor-register-with">
+								xor register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								with:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="and-register-with">
+								and register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								with:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block amber" id="not-register">
+								not register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header lime"><b class="center-text uppercase light-spacing">Game</b></div>
+						<div class="collapsible-body">
+							<div class="card-panel hoverable waves-effect waves-block lime" id="set-register-to-control-state">
+								set register:
+								<span class="card-panel teal accent-1 waves-effect">R0</span>
+								to controller state
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="move-to">
+								move to x:
+								<span class="card-panel waves-effect">0</span>
+								y:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="line-to">
+								line to x:
+								<span class="card-panel waves-effect">0</span>
+								y:
+								<span class="card-panel waves-effect">0</span>
+								with color:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="rect-to">
+								rect to x:
+								<span class="card-panel waves-effect">0</span>
+								y:
+								<span class="card-panel waves-effect">0</span>
+								with color:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="fill-rect-to">
+								fill rect to x:
+								<span class="card-panel waves-effect">0</span>
+								y:
+								<span class="card-panel waves-effect">0</span>
+								with color:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="fill-screen-with-color">
+								fill screen with color:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="draw-stamp">
+								draw stamp:
+								<span class="card-panel waves-effect">0</span>
+								with color:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="set-up-sprite">
+								set up sprite:
+								<span class="card-panel waves-effect">0</span>
+								with pattern at ram:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="move-sprite">
+								move sprite:
+								<span class="card-panel waves-effect">0</span>
+								to x:
+								<span class="card-panel waves-effect">0</span>
+								y:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="set-sprite-visibility">
+								set sprite:
+								<span class="card-panel waves-effect">0</span>
+								visibility:
+								<span class="card-panel waves-effect">0</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block lime" id="wait-for-next-frame">
+								<div class="valign-wrapper">
+									wait for next graphics frame
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header deep-orange"><b class="center-text uppercase light-spacing">Flow</b></div>
+						<div class="collapsible-body">
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="jump-to">
+								jump to:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="run-sub">
+								run subroutine:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="jump-to-if-eq">
+								jump to:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a = b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="run-sub-if-eq">
+								run subroutine:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a = b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="jump-to-if-gt">
+								jump to:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &gt; b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="run-sub-if-gt">
+								run subroutine:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &gt; b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="jump-to-if-lt">
+								jump to:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &lt; b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="run-sub-if-lt">
+								run subroutine:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &lt; b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="jump-to-if-ne">
+								jump to:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &ne; b
+							</div>
+							<div class="card-panel hoverable waves-effect waves-block deep-orange" id="run-sub-if-ne">
+								run subroutine:
+								<span class="card-panel waves-effect light-blue lighten-4">label</span>
+								if a &ne; b
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<div class="col s8">
+			<div class="col s8 right">
 				<div class="card">
-					<div class="card-content">
-						<b class="center-text uppercase light-spacing">Code</b>
+					<div class="card-content" id="code-panel">
+						<div class="row">
+							<div class="col s10-5">
+								<div class="card-panel hoverable waves-effect waves-block light-blue lighten-4">
+									label:
+									<input type="text" class="browser-default z-depth-1" value="beginning of code" />
+								</div>
+							</div>
+							<div class="col s1-5">
+								<a class="btn btn-beside-block materialize-red lighten-1 waves-effect btn-delete tooltipped" data-tooltip="delete">
+									<div class="valign-wrapper">
+										<i class="material-icons">delete</i>
+									</div>
+								</a>
+								<a class="btn right btn-beside-block waves-effect cyan btn-insert-after tooltipped" data-tooltip="insert after">
+									<div class="valign-wrapper">
+										<i class="material-icons">keyboard_arrow_down</i>
+									</div>
+								</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

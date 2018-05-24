@@ -20,55 +20,55 @@ Palette:
 */
 .color0 {
 	color: white;
-	background-color: #393457;
+	background-color: #393457 !important;
 }
 .color1 {
-	background-color: #ffffff;
+	background-color: #ffffff !important;
 }
 .color2 {
-	background-color: #6df7c1;
+	background-color: #6df7c1 !important;
 }
 .color3 {
-	background-color: #11adc1;
+	background-color: #11adc1 !important;
 }
 .color4 {
 	color: white;
-	background-color: #606c81;
+	background-color: #606c81 !important;
 }
 .color5 {
 	color: white;
-	background-color: #1e8875;
+	background-color: #1e8875 !important;
 }
 .color6 {
-	background-color: #5bb361;
+	background-color: #5bb361 !important;
 }
 .color7 {
-	background-color: #a1e55a;
+	background-color: #a1e55a !important;
 }
 .color8 {
-	background-color: #f7e476;
+	background-color: #f7e476 !important;
 }
 .color9 {
-	background-color: #f99252;
+	background-color: #f99252 !important;
 }
 .color10 {
-	background-color: #cb4d68;
+	background-color: #cb4d68 !important;
 }
 .color11 {
 	color: white;
-	background-color: #6a3771;
+	background-color: #6a3771 !important;
 }
 .color12 {
-	background-color: #c92464;
+	background-color: #c92464 !important;
 }
 .color13 {
-	background-color: #f48cb6;
+	background-color: #f48cb6 !important;
 }
 .color14 {
-	background-color: #f7b69e;
+	background-color: #f7b69e !important;
 }
 .color15 {
-	background-color: #9b9c82;
+	background-color: #9b9c82 !important;
 }
 ul.list li {
 	list-style-type: disc !important;
@@ -81,10 +81,54 @@ span.card-panel {
 	margin-left: 5px;
 	margin-right: 5px;
 }
+input[type=text] {
+	display: inline-block !important;
+	font-size: 12px !important;
+	height: 32px;
+	border: none;
+	border-radius: 2px;
+	margin-top: 5px;
+	margin-left: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+input::placeholder {
+	color: rgba(0,0,0,0.65);
+}
+label span {
+	color: black;
+}
+#code-panel {
+	overflow-y: scroll;
+}
+.center-align {
+	text-align: center;
+}
+.valign-wrapper {
+	height: 100%;
+}
 div.card-panel {
 	padding: 6px;
 	margin: 5px;
-	height: 55px;
+	height: 54px;
+}
+.btn-beside-block {
+	height: 54px;
+	padding: 2px;
+	margin: 5px;
+}
+div.card-panel.insert {
+	height: 32px;
+	font-size: 12px;
+}
+.btn-beside-block i {
+	font-size: 24px !important;
+}
+.s1-5 {
+	width: 12.5%;
+}
+.s10-5 {
+	width: 87.5%;
 }
 canvas {
 	width: 320px;
@@ -96,8 +140,9 @@ canvas {
 	display: block;
 	border-radius: 2px;
 }
-.spacer {
-	height: 70px;
+.test {
+	height: 2000px;
+	width: 4px;
 }
 body {
 	max-width: 1300px;
@@ -111,7 +156,7 @@ body {
 .modal {
 	z-index: 1800 !important;
 }
-.modal-content {
+.modal-fixed-footer .modal-content {
 	overflow-y: scroll !important;
 }
 .center-text {
@@ -124,4 +169,10 @@ body {
 }
 .light-spacing {
 	letter-spacing: 0.3em;
+}
+html {
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	border: none;
 }
